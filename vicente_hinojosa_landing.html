@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vicente Hinojosa — AI Aesthetics Consultant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #1a1714;
+    --parchment: #f4efe8;
+    --warm-mid: #e8dfd3;
+    --charcoal: #3d3530;
+    --ash: #8a7f78;
+    --ochre: #b8894a;
+    --ochre-light: #d4a86a;
+    --rust: #8b4a2f;
+    --white: #fdfaf6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--parchment) 60%, transparent);
+  }
+
+  .nav-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ash);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--ochre); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 6rem 3rem;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--ochre);
+  }
+
+  .hero-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ash);
+    line-height: 1.7;
+    max-width: 38ch;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--ochre);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--charcoal);
+    border: 1px solid var(--charcoal);
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    background: var(--charcoal);
+    color: var(--parchment);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ash);
+    border: 1px solid var(--warm-mid);
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--ochre);
+    color: var(--ochre);
+    transform: translateY(-1px);
+  }
+
+  .hero-right {
+    position: relative;
+    background: var(--charcoal);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.5s 0.2s forwards;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 30% 40%, rgba(184,137,74,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,74,47,0.08) 0%, transparent 50%);
+  }
+
+  .charcoal-marks {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+  }
+
+  .hero-quote {
+    position: absolute;
+    bottom: 4rem;
+    left: 3rem;
+    right: 3rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 1.4;
+    opacity: 0;
+    animation: fadeUp 1.2s 1.2s forwards;
+  }
+
+  .hero-quote span {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-style: normal;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-top: 1.5rem;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    width: 4rem;
+    height: 1px;
+    background: var(--ochre);
+    margin: 0 auto 4rem;
+  }
+
+  /* FRAMEWORK SECTION */
+  .framework {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-intro {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--ash);
+    max-width: 55ch;
+    line-height: 1.8;
+    margin-bottom: 5rem;
+  }
+
+  .questions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--warm-mid);
+    border-left: 1px solid var(--warm-mid);
+  }
+
+  .question-card {
+    padding: 3rem;
+    border-right: 1px solid var(--warm-mid);
+    border-bottom: 1px solid var(--warm-mid);
+    position: relative;
+    transition: background 0.4s;
+  }
+
+  .question-card:hover {
+    background: rgba(184,137,74,0.04);
+  }
+
+  .question-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--warm-mid);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    transition: color 0.4s;
+  }
+
+  .question-card:hover .question-number {
+    color: var(--ochre-light);
+  }
+
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .question-desc {
+    font-size: 0.85rem;
+    color: var(--ash);
+    line-height: 1.7;
+  }
+
+  /* SERVICES */
+  .services {
+    background: var(--charcoal);
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .services::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 10% 50%, rgba(184,137,74,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 20%, rgba(139,74,47,0.06) 0%, transparent 40%);
+  }
+
+  .services-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .services .section-title {
+    color: var(--parchment);
+  }
+
+  .services .section-intro {
+    color: rgba(244,239,232,0.5);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .service-card {
+    border: 1px solid rgba(244,239,232,0.1);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: border-color 0.4s, transform 0.3s;
+  }
+
+  .service-card:hover {
+    border-color: var(--ochre);
+    transform: translateY(-4px);
+  }
+
+  .service-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--parchment);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-desc {
+    font-size: 0.85rem;
+    color: rgba(244,239,232,0.5);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .service-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ochre-light);
+  }
+
+  /* CASE STUDY */
+  .case-study {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .case-study-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .case-label-stack {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .case-finding {
+    border-top: 1px solid var(--warm-mid);
+    padding: 3rem 0;
+  }
+
+  .case-finding:last-child {
+    border-bottom: 1px solid var(--warm-mid);
+  }
+
+  .finding-q {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1rem;
+  }
+
+  .finding-answer {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .finding-body {
+    font-size: 0.9rem;
+    color: var(--ash);
+    line-height: 1.8;
+  }
+
+  /* CONTACT */
+  .contact {
+    background: var(--ink);
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(184,137,74,0.1) 0%, transparent 60%);
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .contact .section-title {
+    color: var(--parchment);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-body {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: rgba(244,239,232,0.5);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .contact-link {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre-light);
+    text-decoration: none;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .contact-link::before {
+    content: '—';
+    color: var(--rust);
+  }
+
+  .contact-link:hover { color: var(--parchment); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(244,239,232,0.06);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: rgba(244,239,232,0.3);
+  }
+
+  .footer-note {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: rgba(244,239,232,0.2);
+  }
+
+  /* SVG MARKS */
+  .marks-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 40vh; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    .questions-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .case-study-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .case-label-stack { position: static; }
+    .framework, .case-study { padding: 5rem 1.5rem; }
+    .services { padding: 5rem 1.5rem; }
+    .contact { padding: 5rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .hero-ctas { flex-direction: column; }
+    .btn-primary, .btn-secondary, .btn-ghost { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Vicente Hinojosa</span>
+  <ul class="nav-links">
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#audit">Case Study</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">AI Aesthetics Consulting</p>
+    <h1 class="hero-title">
+      When the window<br>
+      <em>fogs</em>,<br>
+      who looks<br>
+      at the process?
+    </h1>
+    <p class="hero-subtitle">
+      Generative AI has severed the interpretive relationship between artifact and maker. Accountability requires a new lens.
+    </p>
+    <div class="hero-ctas">
+      <a href="#services" class="btn-primary">Book an Audit</a>
+      <a href="#framework" class="btn-secondary">The Framework</a>
+      <a href="#oracle" class="btn-ghost">Download The Oracle</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <svg class="marks-svg charcoal-marks" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice">
+      <!-- Charcoal-style gestural marks -->
+      <g stroke="#f4efe8" fill="none" stroke-linecap="round">
+        <path d="M 80 200 Q 200 150 320 220 Q 440 290 520 250" stroke-width="1.5" opacity="0.4"/>
+        <path d="M 60 210 Q 190 160 310 230 Q 430 300 510 260" stroke-width="0.8" opacity="0.3"/>
+        <path d="M 100 400 Q 250 350 380 420 Q 480 460 560 440" stroke-width="1.2" opacity="0.35"/>
+        <path d="M 40 600 Q 150 550 280 610 Q 400 660 520 630" stroke-width="1" opacity="0.3"/>
+        <!-- Vertical marks -->
+        <line x1="180" y1="100" x2="160" y2="700" stroke-width="0.5" opacity="0.15"/>
+        <line x1="360" y1="50" x2="340" y2="750" stroke-width="0.5" opacity="0.1"/>
+        <!-- Cross marks -->
+        <path d="M 450 300 L 480 340 M 480 300 L 450 340" stroke-width="1.5" opacity="0.4"/>
+        <path d="M 150 500 L 175 530 M 175 500 L 150 530" stroke-width="1" opacity="0.3"/>
+        <!-- Gestural curve -->
+        <path d="M 50 400 C 150 200, 400 600, 580 300" stroke-width="0.8" opacity="0.12"/>
+      </g>
+    </svg>
+    <blockquote class="hero-quote">
+      "The output looks the same as it always did. The window is gone."
+      <span>— The Oracle, 2025</span>
+    </blockquote>
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section class="framework" id="framework">
+  <div class="reveal">
+    <span class="section-label">The Framework</span>
+    <h2 class="section-title">Four questions<br>that see through the output</h2>
+    <p class="section-intro">
+      Process-centered accountability grounds aesthetic judgment in production conditions — not output properties alone. These are the diagnostic questions.
+    </p>
+  </div>
+
+  <div class="questions-grid reveal">
+    <div class="question-card">
+      <div class="question-number">01</div>
+      <p class="question-text">What did it learn from — and did those people agree?</p>
+      <p class="question-desc">Training data carries consent structures. When a system sounds like wisdom, it is drawing on labor that was never offered voluntarily.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">02</div>
+      <p class="question-text">What does the user actually do — are they growing or skipping?</p>
+      <p class="question-desc">The same tool used differently produces completely different accountability outcomes. One path cultivates judgment. The other bypasses it.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">03</div>
+      <p class="question-text">Who gets credit — and is that honest?</p>
+      <p class="question-desc">Presenting AI-generated work under one's name implies judgments were made by the person presenting. The system makes that claim impossible to verify.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">04</div>
+      <p class="question-text">What did it cost — and is that visible?</p>
+      <p class="question-desc">Every AI interaction consumes water, electricity, and hardware. These costs are invisible by design. What is invisible cannot be evaluated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <div class="reveal">
+      <span class="section-label">Services</span>
+      <h2 class="section-title">The work that follows visibility</h2>
+      <p class="section-intro">
+        Each engagement applies the framework to your system, your organization, your creative practice — and returns findings, not just observations.
+      </p>
+    </div>
+
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <span class="service-tag">Foundational</span>
+        <h3 class="service-name">Aesthetic Audit</h3>
+        <p class="service-desc">A structured evaluation of your AI system or creative deployment through the four diagnostic questions. Returns a written findings report with accountability map and actionable recommendations.</p>
+        <p class="service-price">Starting at $2,500</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-tag">Strategic</span>
+        <h3 class="service-name">Advisory Session</h3>
+        <p class="service-desc">A focused 90-minute working session for teams navigating AI integration decisions — product development, creative policy, institutional governance, or academic frameworks.</p>
+        <p class="service-price">$750 / session</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-tag">Retained</span>
+        <h3 class="service-name">Ongoing Advisory</h3>
+        <p class="service-desc">Monthly retainer for organizations building AI-mediated creative products. Continuous access to the framework, ongoing evaluation, and strategic positioning as standards evolve.</p>
+        <p class="service-price">From $3,500 / month</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 4rem;" class="reveal">
+      <a href="#contact" class="btn-primary" style="background: var(--ochre); color: var(--ink);">Schedule a Conversation</a>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="case-study" id="audit">
+  <div class="reveal">
+    <span class="section-label">Live Case Study — February 28, 2026</span>
+    <h2 class="section-title">Auditing Claude<br>on the day it was banned</h2>
+    <p class="section-intro">The framework applied to the AI system at the center of yesterday's political firestorm. These are the findings.</p>
+  </div>
+
+  <div class="case-study-inner" style="margin-top: 4rem;">
+    <div class="case-label-stack reveal">
+      <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--ash); line-height: 1.7;">
+        "The framework came from charcoal and mark-making — understanding what it means to leave evidence that you were present."
+      </p>
+      <p style="margin-top: 2rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ochre);">Vicente Hinojosa</p>
+    </div>
+
+    <div class="reveal">
+      <div class="case-finding">
+        <p class="finding-q">Question 01 — Consent</p>
+        <p class="finding-answer">The consent problem is foundational.</p>
+        <p class="finding-body">Every philosopher, artist, and writer Claude learned from never agreed to that. When it sounds like wisdom, it is drawing on labor that was never offered voluntarily. This is a structural condition, not an exception.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">Question 02 — Pedagogy</p>
+        <p class="finding-answer">The user question is live in real time.</p>
+        <p class="finding-body">In the audit conversation itself, the researcher steered — bringing framework, architecture, and judgment. But the same tool used differently is pure bypass. Same system. Completely different accountability outcome.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">Question 03 — Authorship</p>
+        <p class="finding-answer">The credit question is where honesty lives.</p>
+        <p class="finding-body">The researcher's name is on the work. That is honest because the thinking is theirs. Most people using these systems do not make that distinction visible — and the system does nothing to surface it.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">Question 04 — Material Cost</p>
+        <p class="finding-answer">The cost is invisible by design.</p>
+        <p class="finding-body">Water. Energy. Hardware. Labor. None of it surfaces in the interface. The experience is frictionless. What cannot be seen cannot be evaluated — and cannot be weighed against the value it produces.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">Additional Finding — Process Decision</p>
+        <p class="finding-answer">Anthropic made an aesthetic decision in public.</p>
+        <p class="finding-body">Refusing to permit Claude's use in mass domestic surveillance and autonomous weapons — under government pressure, with a $200M contract at stake — is process-centered accountability performed in real time. That is not a product choice. It is a statement about what kind of trace gets left in the world.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORACLE DOWNLOAD -->
+<section style="background: var(--warm-mid); padding: 6rem 3rem; text-align: center;" id="oracle">
+  <div style="max-width: 600px; margin: 0 auto;" class="reveal">
+    <span class="section-label" style="display: block; margin-bottom: 1rem;">Free Resource</span>
+    <h2 class="section-title" style="margin-bottom: 1.5rem;">The Oracle</h2>
+    <p style="font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--ash); font-size: 1rem; line-height: 1.8; margin-bottom: 2.5rem;">
+      A plain-language guide to aesthetic accountability in AI systems. Written for builders, deployers, and decision-makers — regardless of technical or philosophical background.
+    </p>
+    <a href="mailto:vince.hinojosa@gmail.com?subject=Oracle Download Request" class="btn-primary">Request The Oracle</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner reveal">
+    <span class="section-label">Begin</span>
+    <h2 class="section-title">Every engagement<br>starts with a conversation</h2>
+    <p class="contact-body">
+      The framework is designed to see what others miss. If you're building with AI — or evaluating those who are — that visibility changes what gets built.
+    </p>
+    <div class="contact-options">
+      <a href="mailto:vince.hinojosa@gmail.com" class="contact-link">Book an Aesthetic Audit</a>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Advisory Session" class="contact-link">Schedule an Advisory Session</a>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Retained Advisory" class="contact-link">Explore a Retained Engagement</a>
+      <a href="https://www.linkedin.com/in/vicentehinojosa/" target="_blank" class="contact-link">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-name">Vicente Hinojosa — AI Aesthetics Consultant & Independent Researcher</span>
+  <span class="footer-note">Aesthetic Intelligibility and AI-Mediated Creativity</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav background on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      nav.style.background = 'var(--parchment)';
+      nav.style.boxShadow = '0 1px 0 rgba(26,23,20,0.08)';
+    } else {
+      nav.style.background = 'linear-gradient(to bottom, var(--parchment) 60%, transparent)';
+      nav.style.boxShadow = 'none';
+    }
+  });
+</script>
+</body>
+</html>
