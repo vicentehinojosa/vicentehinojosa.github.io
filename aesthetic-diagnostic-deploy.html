@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aesthetic Diagnostic — Vicente Hinojosa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0c0a08;color:#f0ebe0;font-family:'EB Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.65;}
+.orb{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0;}
+.orb1{width:580px;height:580px;background:#c4622c;top:-200px;left:-120px;opacity:0.055;animation:drift 22s ease-in-out infinite alternate;}
+.orb2{width:420px;height:420px;background:#c8973a;bottom:-160px;right:-80px;opacity:0.045;animation:drift 17s ease-in-out infinite alternate-reverse;}
+@keyframes drift{from{transform:translate(0,0) scale(1);}to{transform:translate(35px,25px) scale(1.07);}}
+.prog-rail{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(240,235,224,0.06);z-index:100;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#c4622c,#c8973a);transition:width 0.9s cubic-bezier(0.4,0,0.2,1);}
+.stage{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;}
+.inner{max-width:740px;width:100%;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.3em;text-transform:uppercase;color:#7a7168;margin-bottom:1rem;}
+.ember{color:#c4622c;}
+.display{font-family:'Cormorant Garamond',serif;font-weight:300;line-height:1.08;letter-spacing:-0.02em;color:#f0ebe0;}
+.display em{font-style:italic;color:#c8973a;}
+.xl{font-size:clamp(2.4rem,6vw,4.6rem);}
+.lg{font-size:clamp(1.7rem,4vw,2.6rem);}
+.rule-v{width:1px;height:48px;background:linear-gradient(to bottom,transparent,rgba(240,235,224,0.18),transparent);margin:1.8rem auto;}
+.rule-h{width:100%;height:1px;background:linear-gradient(90deg,#c4622c,transparent);opacity:0.3;margin:2rem 0;}
+.sub{font-size:0.98rem;color:#7a7168;font-style:italic;line-height:1.65;}
+.fw-pills{display:flex;border:1px solid rgba(240,235,224,0.08);margin:2.2rem auto 0;max-width:500px;}
+.fw-pill{flex:1;padding:0.85rem 0.4rem;font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.09em;text-transform:uppercase;color:#7a7168;text-align:center;border-right:1px solid rgba(240,235,224,0.08);line-height:1.5;}
+.fw-pill:last-child{border-right:none;}
+.fw-pill strong{display:block;color:#d4cdc2;margin-bottom:0.1rem;font-weight:400;}
+.btn{padding:0.95rem 2.8rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;background:transparent;border:1px solid rgba(240,235,224,0.2);color:#f0ebe0;cursor:pointer;transition:all 0.22s;}
+.btn:hover{border-color:#c8973a;color:#c8973a;background:rgba(200,151,58,0.05);}
+.btn-e{border-color:rgba(196,98,44,0.4)!important;color:#c4622c!important;}
+.btn-e:hover{background:rgba(196,98,44,0.07)!important;border-color:#c4622c!important;}
+.btn-sm{padding:0.8rem 1.3rem;font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.16em;text-transform:uppercase;background:transparent;border:1px solid rgba(240,235,224,0.08);color:#7a7168;cursor:pointer;transition:all 0.2s;}
+.btn-sm:hover{color:#d4cdc2;}
+.btn-off{opacity:0.25;pointer-events:none;}
+.nav{display:flex;gap:0.8rem;align-items:center;margin-top:0.5rem;}
+.slabel{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.26em;text-transform:uppercase;color:#7a7168;margin-bottom:2.2rem;text-align:center;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.7rem;margin:1.8rem 0;}
+.card{padding:1.25rem 1.1rem;border:1px solid rgba(240,235,224,0.07);cursor:pointer;transition:all 0.16s;background:rgba(255,255,255,0.01);user-select:none;position:relative;}
+.card:hover{border-color:rgba(240,235,224,0.17);background:rgba(255,255,255,0.025);transform:translateY(-1px);}
+.card.on{border-color:#c4622c!important;background:rgba(196,98,44,0.07)!important;}
+.ck{position:absolute;top:0.5rem;right:0.7rem;font-family:'DM Mono',monospace;font-size:0.56rem;color:#c4622c;}
+.ci{font-size:1.25rem;margin-bottom:0.55rem;display:block;opacity:0.6;}
+.ct{font-family:'Cormorant Garamond',serif;font-size:0.98rem;font-weight:500;color:#f0ebe0;margin-bottom:0.22rem;}
+.cd{font-size:0.72rem;color:#7a7168;line-height:1.5;font-style:italic;}
+.spec{margin:1.8rem 0 2.2rem;}
+.spec-ends{display:flex;justify-content:space-between;margin-bottom:0.4rem;}
+.spec-end{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.09em;text-transform:uppercase;color:#7a7168;max-width:130px;line-height:1.4;}
+.spec-end:last-child{text-align:right;}
+input[type=range].sl{width:100%;-webkit-appearance:none;appearance:none;height:2px;border-radius:0;outline:none;cursor:grab;margin:0.55rem 0;}
+input[type=range].sl::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:#f0ebe0;border:2px solid #c4622c;cursor:grab;box-shadow:0 0 0 4px rgba(196,98,44,0.14);}
+.sdesc{min-height:2.4rem;margin-top:0.9rem;font-size:0.97rem;color:#d4cdc2;font-style:italic;line-height:1.6;text-align:center;}
+.ta{width:100%;min-height:140px;background:rgba(255,255,255,0.015);border:1px solid rgba(240,235,224,0.08);color:#d4cdc2;font-family:'EB Garamond',serif;font-size:1rem;line-height:1.75;padding:1.2rem 1.3rem;resize:none;outline:none;transition:border-color 0.2s;margin-top:1.4rem;}
+.ta:focus{border-color:rgba(196,98,44,0.32);}
+.ta::placeholder{color:#7a7168;font-style:italic;}
+.cc{text-align:right;font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.09em;color:#7a7168;margin-top:0.3rem;}
+.err{font-size:0.8rem;color:#d4826a;font-style:italic;margin-top:0.45rem;}
+.astage{text-align:center;}
+.asteps{list-style:none;margin-top:1.4rem;}
+.astep{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.17em;text-transform:uppercase;color:#7a7168;padding:0.3rem 0;transition:color 0.4s;}
+.astep.done{color:#c4622c;}
+@keyframes ds{0%{stroke-dashoffset:500;opacity:0.3}50%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-500;opacity:0.3}}
+.sp{stroke-dasharray:500;stroke-dashoffset:500;animation:ds 3s ease-in-out infinite;}
+.sp2{stroke-dasharray:500;stroke-dashoffset:500;animation:ds 3s ease-in-out infinite;animation-delay:-1.2s;}
+.rbody{font-size:1.03rem;line-height:1.85;color:#d4cdc2;max-width:640px;}
+.rbody p{margin-bottom:1.3rem;}
+.pblock{margin-top:2.4rem;padding:1.7rem 2rem;border:1px solid rgba(196,98,44,0.2);background:rgba(196,98,44,0.03);max-width:520px;}
+.plabel{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.2em;text-transform:uppercase;color:#c4622c;margin-bottom:0.65rem;}
+.ptitle{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:#f0ebe0;margin-bottom:0.35rem;}
+.pdesc{font-size:0.88rem;color:#7a7168;font-style:italic;line-height:1.6;}
+.ctarow{margin-top:1.8rem;display:flex;gap:0.8rem;flex-wrap:wrap;align-items:center;}
+.cta-a{padding:0.9rem 2rem;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:#c4622c;background:transparent;border:1px solid rgba(196,98,44,0.4);text-decoration:none;transition:background 0.2s;display:inline-block;}
+.cta-a:hover{background:rgba(196,98,44,0.07);}
+.sig{margin-top:2.8rem;padding-top:1.6rem;border-top:1px solid rgba(240,235,224,0.07);font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:#7a7168;opacity:0.5;}
+.rstage{padding:4.5rem 1.5rem 4rem;align-items:flex-start;justify-content:flex-start;}
+.byline{margin-top:1.6rem;font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.17em;text-transform:uppercase;color:#7a7168;opacity:0.55;}
+@media(max-width:500px){
+  .fw-pills{flex-direction:column;}
+  .fw-pill{border-right:none;border-bottom:1px solid rgba(240,235,224,0.08);}
+  .fw-pill:last-child{border-bottom:none;}
+  .grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const SYSTEM_PROMPT = `You are the diagnostic intelligence for Vicente Hinojosa's AI Aesthetics Consulting practice. Your task is to read a potential client's diagnostic inputs and produce a precise, philosophical, and personally resonant diagnostic reading.
+
+Vicente's framework rests on three concepts:
+
+1. THE PROPERTY/ACHIEVEMENT DISTINCTION: AI systems produce properties (appearances, outputs) without achievements (the embedded labor, judgment, and intention behind them). Organizations deploying AI without process accountability accumulate properties without achievements and lose the ability to distinguish them.
+
+2. INTENTIONALITY-OUTPUT DECOUPLING: Traditional creative work embeds the maker's judgment in what is made. AI-mediated creation can produce high-quality outputs with minimal embedded intention. When this becomes the norm, organizations lose creative authority — the ability to stand behind, explain, and evolve their work.
+
+3. PROCESS-CENTERED ACCOUNTABILITY: The standard for evaluating AI-mediated creative work should be the quality of the process — the presence of human judgment, critical attention, and intentional decision-making at each meaningful step. This is not anti-AI. It preserves and strengthens creative agency.
+
+Respond ONLY with valid JSON, no markdown, no preamble:
+{
+  "profile_title": "3-5 word evocative title for their aesthetic profile",
+  "primary_concept": "The most activated concept name from the three above",
+  "reading": "Four paragraphs separated by double newlines. First: name what is actually happening with precision. Second: connect to the primary concept as recognition not lecture. Third: name the deeper consequence if the pattern continues. Fourth: open a door — not a solution, a reframe.",
+  "path_title": "One of: Aesthetic Audit, Strategic Advisory, or Ongoing Retainer",
+  "path_reason": "One sentence explaining why this fits their situation."
+}
+
+Write in Vicente's voice: plain language, philosophical depth, no jargon, no hype, no preaching.`;
+
+const spectrumTexts = [
+  "Output volume is the metric. Process is invisible.",
+  "Speed first. Someone reviews before publishing, but quickly.",
+  "There's a standard, though it's not written down anywhere.",
+  "Judgment is present at key moments — not every step.",
+  "The process is as intentional as the output. They're inseparable."
+];
+
+const stage1Cards = [
+  { val:"brand-content", icon:"✦", title:"Brand Content", desc:"Copy, posts, newsletters, messaging produced at scale" },
+  { val:"visual-identity", icon:"◈", title:"Visual Identity", desc:"Imagery and design assets generated or assisted by AI" },
+  { val:"product-narrative", icon:"◇", title:"Product Narrative", desc:"How the product is explained, positioned, made legible" },
+  { val:"creative-automation", icon:"⬡", title:"Creative Automation", desc:"Workflows where AI replaces or accelerates creative steps" },
+  { val:"voice-ghostwriting", icon:"◉", title:"Voice & Ghostwriting", desc:"AI writing in someone's name — thought leadership, exec comms" },
+  { val:"other", icon:"○", title:"Something else", desc:"You'll describe it in a later step" },
+];
+
+const stage2Cards = [
+  { val:"voice-drift", icon:"∿", title:"Voice Drift", desc:"Outputs sound technically correct but no longer sound like us" },
+  { val:"coherence-loss", icon:"◫", title:"Coherence Loss", desc:"Different parts of the brand are starting to contradict each other" },
+  { val:"authorship-uncertainty", icon:"⟳", title:"Authorship Uncertainty", desc:"We're not sure who — or what — is making creative decisions" },
+  { val:"quality-floor", icon:"▽", title:"Quality Floor", desc:"Output is faster and cheaper but we can feel it getting flatter" },
+  { val:"accountability-gap", icon:"⊘", title:"Accountability Gap", desc:"When something is wrong, nobody can point to why" },
+  { val:"no-drift", icon:"—", title:"None of these", desc:"I don't see these problems yet", exclusive:true },
+];
+
+const progMap = { landing:0, s1:14, s2:32, s3:52, s4:72, analysis:88, results:100 };
+
+function App() {
+  const [screen, setScreen] = useState("landing");
+  const [s1, setS1] = useState([]);
+  const [s2, setS2] = useState([]);
+  const [s3, setS3] = useState(50);
+  const [s4, setS4] = useState("");
+  const [s4err, setS4err] = useState("");
+  const [steps, setSteps] = useState([false,false,false,false,false]);
+  const [result, setResult] = useState(null);
+  const [apiErr, setApiErr] = useState("");
+
+  const go = (s) => { setScreen(s); window.scrollTo({top:0,behavior:'smooth'}); };
+
+  const tog1 = (val) => setS1(p => p.includes(val) ? p.filter(v=>v!==val) : [...p,val]);
+
+  const tog2 = (val, exclusive) => {
+    if (exclusive) { setS2([val]); return; }
+    setS2(p => {
+      const clean = p.filter(v => !stage2Cards.find(c=>c.val===v&&c.exclusive));
+      return clean.includes(val) ? clean.filter(v=>v!==val) : [...clean,val];
+    });
+  };
+
+  const si = Math.min(4, Math.floor(s3/22));
+  const slBg = `linear-gradient(90deg,#c4622c ${s3}%,rgba(240,235,224,0.1) ${s3}%)`;
+  const prog = progMap[screen]||0;
+
+  const analyze = async () => {
+    if (s4.trim().length < 40) {
+      setS4err("Please describe your situation in more detail — the diagnostic needs something to work with.");
+      return;
+    }
+    setS4err("");
+    go("analysis");
+
+    [800,1700,2600,3500,4400].forEach((d,i) =>
+      setTimeout(() => setSteps(p => { const n=[...p]; n[i]=true; return n; }), d)
+    );
+
+    const msg = `DIAGNOSTIC INPUTS:
+Stage I — Building with AI: ${s1.join(', ')||'not specified'}
+Stage II — Friction felt: ${s2.join(', ')||'none'}
+Stage III — Process depth: ${s3}/100 — "${spectrumTexts[si]}"
+Stage IV — Recent project: "${s4.trim()}"
+Generate the Aesthetic Diagnostic Reading now.`;
+
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "",
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true"
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: [{ role:"user", content:msg }]
+        })
+      });
+
+      const txt = await res.text();
+      let data;
+      try { data = JSON.parse(txt); }
+      catch(e) { throw new Error("Response not JSON: " + txt.slice(0,150)); }
+
+      if (!res.ok) throw new Error("API " + res.status + ": " + JSON.stringify(data.error||data).slice(0,200));
+      if (!data.content) throw new Error("No content: " + JSON.stringify(data).slice(0,200));
+
+      const raw = data.content.map(b=>b.text||'').join('');
+      const clean = raw.replace(/```json|```/g,'').trim();
+      let parsed;
+      try { parsed = JSON.parse(clean); }
+      catch(e) { throw new Error("Parse fail: " + clean.slice(0,200)); }
+
+      setTimeout(() => { setResult(parsed); go("results"); }, 5800);
+    } catch(e) {
+      setApiErr(e.message||"Unknown error");
+      setTimeout(() => go("results"), 5800);
+    }
+  };
+
+  const reset = () => {
+    setScreen("landing"); setS1([]); setS2([]); setS3(50); setS4(""); setS4err("");
+    setSteps([false,false,false,false,false]); setResult(null); setApiErr("");
+  };
+
+  return (
+    <div>
+      <div className="prog-rail"><div className="prog-fill" style={{width:prog+'%'}} /></div>
+
+      {/* LANDING */}
+      {screen==="landing" && (
+        <div className="stage" style={{textAlign:'center'}}>
+          <p className="eyebrow ember">Vicente Hinojosa — AI Aesthetics Consulting</p>
+          <h1 className="display xl">The Aesthetic<br/><em>Diagnostic</em></h1>
+          <div className="rule-v" />
+          <p className="sub" style={{maxWidth:460,margin:'0 auto'}}>
+            Most companies using AI in creative work don't have an output problem.<br/>
+            They have a process problem — and the outputs are where it becomes visible.
+          </p>
+          <div className="fw-pills">
+            <div className="fw-pill"><strong>Property / Achievement</strong>Distinction</div>
+            <div className="fw-pill"><strong>Intentionality-Output</strong>Decoupling</div>
+            <div className="fw-pill"><strong>Process-Centered</strong>Accountability</div>
+          </div>
+          <button className="btn btn-e" style={{marginTop:'3rem'}} onClick={()=>go("s1")}>
+            Begin the Diagnostic
+          </button>
+          <p className="byline">A framework by Vicente Hinojosa — vicentehinojosa.github.io</p>
+        </div>
+      )}
+
+      {/* STAGE 1 */}
+      {screen==="s1" && (
+        <div className="stage"><div className="inner">
+          <p className="slabel">Stage I of IV — Context</p>
+          <h2 className="display lg">What are you building<br/><em>with AI?</em></h2>
+          <p className="sub" style={{marginTop:'0.5rem'}}>Select all that apply to your current work.</p>
+          <div className="grid">
+            {stage1Cards.map(c => (
+              <div key={c.val} className={"card"+(s1.includes(c.val)?" on":"")} onClick={()=>tog1(c.val)}>
+                {s1.includes(c.val) && <span className="ck">✓</span>}
+                <span className="ci">{c.icon}</span>
+                <div className="ct">{c.title}</div>
+                <div className="cd">{c.desc}</div>
+              </div>
+            ))}
+          </div>
+          <div className="nav">
+            <button className="btn-sm" onClick={()=>go("landing")}>← Back</button>
+            <button className={"btn btn-e"+(s1.length===0?" btn-off":"")} onClick={()=>s1.length>0&&go("s2")}>Continue →</button>
+          </div>
+        </div></div>
+      )}
+
+      {/* STAGE 2 */}
+      {screen==="s2" && (
+        <div className="stage"><div className="inner">
+          <p className="slabel">Stage II of IV — The Friction</p>
+          <h2 className="display lg">Where do you feel<br/><em>the drift?</em></h2>
+          <p className="sub" style={{marginTop:'0.5rem'}}>Select the ones that feel familiar — even if you can't fully name them yet.</p>
+          <div className="grid">
+            {stage2Cards.map(c => (
+              <div key={c.val} className={"card"+(s2.includes(c.val)?" on":"")} onClick={()=>tog2(c.val,c.exclusive||false)}>
+                {s2.includes(c.val) && <span className="ck">✓</span>}
+                <span className="ci">{c.icon}</span>
+                <div className="ct">{c.title}</div>
+                <div className="cd">{c.desc}</div>
+              </div>
+            ))}
+          </div>
+          <div className="nav">
+            <button className="btn-sm" onClick={()=>go("s1")}>← Back</button>
+            <button className={"btn btn-e"+(s2.length===0?" btn-off":"")} onClick={()=>s2.length>0&&go("s3")}>Continue →</button>
+          </div>
+        </div></div>
+      )}
+
+      {/* STAGE 3 */}
+      {screen==="s3" && (
+        <div className="stage"><div className="inner">
+          <p className="slabel">Stage III of IV — Process Depth</p>
+          <h2 className="display lg">How present are you<br/><em>in what your AI produces?</em></h2>
+          <p className="sub" style={{marginTop:'0.5rem'}}>The central question of the framework. Be honest — it only works if you are.</p>
+          <div className="spec">
+            <div className="spec-ends">
+              <div className="spec-end">I prompt and publish. Speed is the point.</div>
+              <div className="spec-end">Every output passes through my judgment.</div>
+            </div>
+            <input type="range" className="sl" min="0" max="100" value={s3}
+              style={{background:slBg}} onChange={e=>setS3(Number(e.target.value))} />
+            <div className="sdesc">{spectrumTexts[si]}</div>
+          </div>
+          <div className="nav">
+            <button className="btn-sm" onClick={()=>go("s2")}>← Back</button>
+            <button className="btn btn-e" onClick={()=>go("s4")}>Continue →</button>
+          </div>
+        </div></div>
+      )}
+
+      {/* STAGE 4 */}
+      {screen==="s4" && (
+        <div className="stage"><div className="inner">
+          <p className="slabel">Stage IV of IV — Your Situation</p>
+          <h2 className="display lg">Describe one recent project<br/><em>where AI was involved.</em></h2>
+          <p className="sub" style={{marginTop:'0.5rem'}}>What was made, how it was made, and what — if anything — felt off about the result.</p>
+          <textarea className="ta" maxLength={1200}
+            placeholder="A recent campaign, product launch, rebrand — something where AI shaped the final output. Describe the process and what, if anything, gave you pause."
+            value={s4} onChange={e=>setS4(e.target.value)} />
+          <div className="cc">{s4.length} / 1200</div>
+          {s4err && <div className="err">{s4err}</div>}
+          <div className="nav" style={{marginTop:'1.2rem'}}>
+            <button className="btn-sm" onClick={()=>go("s3")}>← Back</button>
+            <button className="btn btn-e" onClick={analyze}>Run the Diagnostic →</button>
+          </div>
+        </div></div>
+      )}
+
+      {/* ANALYSIS */}
+      {screen==="analysis" && (
+        <div className="stage astage">
+          <p className="slabel">Analyzing</p>
+          <h2 className="display" style={{fontSize:'clamp(1.5rem,3.5vw,2.3rem)'}}>Reading your process</h2>
+          <p className="sub" style={{marginTop:'0.4rem'}}>The framework is being applied to your situation.</p>
+          <svg width="140" height="140" viewBox="0 0 140 140" fill="none" style={{margin:'2rem auto',display:'block'}}>
+            <path className="sp" d="M 20 120 Q 42 28 70 70 Q 98 112 120 20" stroke="#c4622c" strokeWidth="1.4" strokeLinecap="round"/>
+            <path className="sp2" d="M 14 70 Q 56 14 70 56 Q 84 98 126 70" stroke="#c8973a" strokeWidth="0.7" strokeLinecap="round"/>
+          </svg>
+          <ul className="asteps">
+            {["Mapping your AI context","Identifying friction patterns","Measuring process depth","Applying the framework","Generating your reading"].map((s,i)=>(
+              <li key={i} className={"astep"+(steps[i]?" done":"")}> — {s}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* RESULTS */}
+      {screen==="results" && (
+        <div className="stage rstage">
+          <div style={{maxWidth:800,width:'100%'}}>
+            <p className="eyebrow ember">Aesthetic Diagnostic — Your Reading</p>
+            {result ? (
+              <>
+                <h2 className="display lg" style={{marginBottom:'0.35rem'}}>{result.profile_title}</h2>
+                <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:'italic',fontSize:'clamp(1.05rem,2.5vw,1.55rem)',color:'#c8973a',marginBottom:'1.8rem'}}>{result.primary_concept}</p>
+                <div className="rule-h"/>
+                <div className="rbody">
+                  {(result.reading||'').split('\n\n').filter(p=>p.trim()).map((p,i)=><p key={i}>{p}</p>)}
+                </div>
+                <div className="pblock">
+                  <div className="plabel">Recommended Engagement</div>
+                  <div className="ptitle">{result.path_title}</div>
+                  <div className="pdesc">{result.path_reason}</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="display lg" style={{marginBottom:'0.35rem'}}>Diagnostic Interrupted</h2>
+                <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:'italic',fontSize:'1.4rem',color:'#c8973a',marginBottom:'1.8rem'}}>Process-Centered Accountability</p>
+                <div className="rule-h"/>
+                <div className="rbody">
+                  <p>The reading couldn't complete — the API pipeline hit an error. This is a technical issue, not a reflection of your inputs.</p>
+                  {apiErr && <p style={{fontFamily:"'DM Mono',monospace",fontSize:'0.66rem',color:'#7a7168',letterSpacing:'0.05em'}}>Error: {apiErr}</p>}
+                  <p>The most meaningful next step is a direct conversation — the context you've shared is already enough to make it worthwhile.</p>
+                </div>
+                <div className="pblock">
+                  <div className="plabel">Recommended Engagement</div>
+                  <div className="ptitle">Aesthetic Audit</div>
+                  <div className="pdesc">A structured audit of your AI creative process against the framework — the right place to begin.</div>
+                </div>
+              </>
+            )}
+            <div className="ctarow">
+              <a href="https://vicentehinojosa.github.io" target="_blank" className="cta-a">Explore the Practice</a>
+              <button className="btn-sm" onClick={reset}>Run Again</button>
+            </div>
+            <div className="sig">Framework for Aesthetic Evaluation of AI-Mediated Creation — Vicente Hinojosa, 2026</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
