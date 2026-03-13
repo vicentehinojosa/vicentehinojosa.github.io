@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vicente Hinojosa — Institute for Process-Centered Accountability</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #1a1714;
+    --parchment: #f4efe8;
+    --warm-mid: #e2d9cc;
+    --charcoal: #3d3530;
+    --ash: #8a7f78;
+    --ochre: #b8894a;
+    --ochre-light: #d4a86a;
+    --rust: #8b4a2f;
+    --white: #fdfaf6;
+    --dark: #0c0a08;
+    --dark-mid: #1a1510;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(244,239,232,0.97) 70%, transparent);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(244,239,232,0.97); backdrop-filter: blur(8px); }
+
+  .nav-identity { display: flex; flex-direction: column; gap: 0.15rem; }
+
+  .nav-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+
+  .nav-institute {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ash);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--ochre); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 9rem 4rem 6rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 0.6rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-institute {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 2.2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.45s forwards;
+    border-left: 2px solid var(--ochre);
+    padding-left: 0.8rem;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 5vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.02;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--ochre); }
+
+  .hero-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ash);
+    line-height: 1.75;
+    max-width: 40ch;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.75s forwards;
+  }
+
+  .hero-publications {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.85s forwards;
+  }
+
+  .pub-line {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--ash);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+  }
+  .pub-line::before {
+    content: '';
+    width: 1.5rem;
+    height: 1px;
+    background: var(--ochre);
+    flex-shrink: 0;
+    transition: width 0.3s;
+  }
+  .pub-line:hover { color: var(--ochre); }
+  .pub-line:hover::before { width: 2.5rem; }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s 0.95s forwards;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--ochre); transform: translateY(-1px); }
+
+  .btn-ochre {
+    background: var(--ochre);
+    color: var(--dark);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-ochre:hover { background: var(--ochre-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--charcoal);
+    border: 1px solid var(--charcoal);
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: var(--charcoal); color: var(--parchment); transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(244,239,232,0.6);
+    border: 1px solid rgba(244,239,232,0.2);
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--ochre); color: var(--ochre); transform: translateY(-1px); }
+
+  /* HERO RIGHT */
+  .hero-right {
+    position: relative;
+    background: var(--charcoal);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.5s 0.2s forwards;
+  }
+
+  .hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(61,53,48,0.35) 0%, transparent 40%),
+      linear-gradient(to top, rgba(26,23,20,0.7) 0%, transparent 50%);
+    z-index: 2;
+  }
+
+  .marks-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.18;
+  }
+
+  .hero-quote {
+    position: absolute;
+    bottom: 4rem;
+    left: 3rem;
+    right: 3rem;
+    z-index: 3;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.3rem, 2.2vw, 2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 1.45;
+    opacity: 0;
+    animation: fadeUp 1.2s 1.3s forwards;
+  }
+
+  .hero-quote cite {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.62rem;
+    font-style: normal;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-top: 1.5rem;
+  }
+
+  /* SECTION COMMONS */
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-intro {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--ash);
+    max-width: 55ch;
+    line-height: 1.85;
+    margin-bottom: 4rem;
+  }
+
+  /* INSTITUTE BANNER */
+  .institute-banner {
+    background: var(--ink);
+    padding: 3.5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .institute-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(184,137,74,0.08) 0%, transparent 70%);
+  }
+
+  .institute-banner-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .institute-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--parchment);
+    margin-bottom: 0.75rem;
+  }
+
+  .institute-descriptor {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1.5rem;
+  }
+
+  .institute-line {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(244,239,232,0.4);
+    max-width: 60ch;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* FRAMEWORK */
+  .framework {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .questions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--warm-mid);
+    border-left: 1px solid var(--warm-mid);
+  }
+
+  .question-card {
+    padding: 3rem;
+    border-right: 1px solid var(--warm-mid);
+    border-bottom: 1px solid var(--warm-mid);
+    transition: background 0.4s;
+  }
+  .question-card:hover { background: rgba(184,137,74,0.04); }
+
+  .question-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--warm-mid);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    transition: color 0.4s;
+  }
+  .question-card:hover .question-number { color: var(--ochre-light); }
+
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .question-desc {
+    font-size: 0.83rem;
+    color: var(--ash);
+    line-height: 1.75;
+  }
+
+  /* FRAMEWORK CONCEPTS BAND */
+  .concepts-band {
+    background: var(--dark);
+    padding: 5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concepts-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(184,137,74,0.09) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .concepts-band-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .concepts-band .section-title { color: var(--parchment); margin-bottom: 0.75rem; }
+  .concepts-band .section-intro { color: rgba(244,239,232,0.45); margin: 0 auto 3rem; }
+
+  .concepts-pills {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0 auto 3.5rem;
+    border: 1px solid rgba(184,137,74,0.2);
+    max-width: 700px;
+  }
+
+  .concept-pill {
+    flex: 1;
+    min-width: 180px;
+    padding: 1.5rem 1.25rem;
+    border-right: 1px solid rgba(184,137,74,0.2);
+    text-align: center;
+  }
+  .concept-pill:last-child { border-right: none; }
+
+  .pill-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .pill-sub {
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(184,137,74,0.4);
+    display: block;
+  }
+
+  /* PRODUCT LADDER */
+  .ladder {
+    background: var(--charcoal);
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ladder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 10% 50%, rgba(184,137,74,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 20%, rgba(139,74,47,0.05) 0%, transparent 40%);
+  }
+
+  .ladder-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .ladder .section-title { color: var(--parchment); }
+  .ladder .section-intro { color: rgba(244,239,232,0.45); }
+
+  .ladder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(244,239,232,0.08);
+    border-left: 1px solid rgba(244,239,232,0.08);
+    margin-top: 4rem;
+  }
+
+  .ladder-card {
+    border-right: 1px solid rgba(244,239,232,0.08);
+    border-bottom: 1px solid rgba(244,239,232,0.08);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: background 0.4s;
+    display: flex;
+    flex-direction: column;
+  }
+  .ladder-card:hover { background: rgba(184,137,74,0.05); }
+
+  .ladder-card.featured {
+    background: rgba(184,137,74,0.08);
+    border-color: rgba(184,137,74,0.2);
+  }
+
+  .ladder-step {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 1.25rem;
+  }
+
+  .ladder-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--parchment);
+    line-height: 1.25;
+    margin-bottom: 1.25rem;
+  }
+
+  .ladder-desc {
+    font-size: 0.82rem;
+    color: rgba(244,239,232,0.45);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  .ladder-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ochre-light);
+    margin-bottom: 1.25rem;
+  }
+
+  .ladder-cta {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.3s, color 0.3s;
+  }
+  .ladder-cta::after { content: '→'; }
+  .ladder-cta:hover { gap: 0.75rem; color: var(--parchment); }
+
+  .audit-cta-row {
+    margin-top: 3rem;
+    text-align: center;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(244,239,232,0.08);
+  }
+
+  .audit-cta-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244,239,232,0.3);
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  /* CASE STUDY */
+  .case-study {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .case-study-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+    margin-top: 4rem;
+  }
+
+  .case-label-stack {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .audit-map {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--warm-mid);
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .audit-cell {
+    background: var(--parchment);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .audit-dimension {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+
+  .audit-status {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+  .audit-status.opaque { color: var(--rust); }
+  .audit-status.partial { color: var(--ochre); }
+
+  .case-finding {
+    border-top: 1px solid var(--warm-mid);
+    padding: 2.5rem 0;
+  }
+  .case-finding:last-child { border-bottom: 1px solid var(--warm-mid); }
+
+  .finding-q {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 0.75rem;
+  }
+
+  .finding-answer {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .finding-body {
+    font-size: 0.875rem;
+    color: var(--ash);
+    line-height: 1.8;
+  }
+
+  /* PUBLICATIONS */
+  .publications {
+    background: var(--warm-mid);
+    padding: 6rem 3rem;
+  }
+
+  .publications-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .pub-item {
+    border-top: 1px solid rgba(26,23,20,0.12);
+    padding: 2rem 0;
+    display: flex;
+    gap: 2rem;
+    align-items: start;
+    text-decoration: none;
+    transition: opacity 0.3s;
+  }
+  .pub-item:first-child { border-top: none; }
+  .pub-item:hover { opacity: 0.7; }
+
+  .pub-year {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--ash);
+    text-transform: uppercase;
+    flex-shrink: 0;
+    padding-top: 0.25rem;
+  }
+
+  .pub-details { flex: 1; }
+
+  .pub-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+  }
+
+  .pub-venue {
+    font-size: 0.75rem;
+    color: var(--ash);
+    margin-bottom: 0.3rem;
+  }
+
+  .pub-ssrn {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
+
+  /* GROUND / STUDIO */
+  .ground {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ground-inner {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .ground-pull {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--charcoal);
+    line-height: 1.4;
+    margin-bottom: 2.5rem;
+    border-left: 2px solid var(--ochre);
+    padding-left: 2rem;
+  }
+
+  .ground-body {
+    font-size: 0.9rem;
+    color: var(--ash);
+    line-height: 1.9;
+  }
+
+  .ground-image-panel {
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+  }
+
+  .ground-image-panel svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+  }
+
+  .ground-caption {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244,239,232,0.45);
+    line-height: 1.7;
+  }
+
+  /* THRESHOLD */
+  .threshold {
+    padding: 5rem 3rem;
+    text-align: center;
+    background: var(--parchment);
+    border-top: 1px solid var(--warm-mid);
+  }
+
+  .threshold-line {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--ash);
+    max-width: 50ch;
+    margin: 0 auto;
+    line-height: 1.9;
+    opacity: 0.7;
+  }
+
+  /* CONTACT */
+  .contact {
+    background: var(--ink);
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(184,137,74,0.09) 0%, transparent 60%);
+  }
+
+  .contact-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .contact .section-title { color: var(--parchment); margin-bottom: 1.5rem; }
+
+  .contact-body {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: rgba(244,239,232,0.45);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    margin-bottom: 3.5rem;
+  }
+
+  .contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgba(184,137,74,0.15);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-link {
+    padding: 1.25rem 2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(244,239,232,0.55);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-bottom: 1px solid rgba(184,137,74,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .contact-link:last-child { border-bottom: none; }
+  .contact-link:hover { color: var(--ochre-light); background: rgba(184,137,74,0.04); padding-left: 2.4rem; }
+  .contact-link::after { content: '→'; opacity: 0.4; font-size: 0.9rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid rgba(184,137,74,0.1);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-left { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: rgba(244,239,232,0.35);
+  }
+
+  .footer-institute {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(184,137,74,0.4);
+  }
+
+  .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+
+  .footer-note {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(244,239,232,0.18);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* REVEAL — preview-safe */
+  .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Preview: force hero animations visible */
+  .hero-eyebrow, .hero-institute, .hero-title, .hero-subtitle,
+  .hero-publications, .hero-ctas, .hero-right, .hero-quote { opacity: 1 !important; animation: none !important; }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 45vh; order: -1; }
+    .hero-left { padding: 5rem 1.5rem 4rem; }
+    .questions-grid { grid-template-columns: 1fr; }
+    .ladder-grid { grid-template-columns: 1fr 1fr; }
+    .case-study-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .case-label-stack { position: static; }
+    .ground-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .publications-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .framework, .case-study, .ground { padding: 5rem 1.5rem; }
+    .ladder, .contact { padding: 5rem 1.5rem; }
+    .publications { padding: 5rem 1.5rem; }
+    .hero-ctas { flex-direction: column; }
+    .concepts-band { padding: 4rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; align-items: center; }
+    .footer-right { align-items: center; }
+  }
+
+  @media (max-width: 600px) {
+    .ladder-grid { grid-template-columns: 1fr; }
+    .audit-map { grid-template-columns: 1fr 1fr; }
+    .concepts-pills { flex-direction: column; }
+    .concept-pill { border-right: none; border-bottom: 1px solid rgba(184,137,74,0.2); }
+    .concept-pill:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-identity">
+    <a href="#" class="nav-name">Vicente Hinojosa</a>
+    <span class="nav-institute">Institute for Process-Centered Accountability</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#work">Work With Me</a></li>
+    <li><a href="#audit">Case Study</a></li>
+    <li><a href="#publications">Research</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Independent Researcher · AI Aesthetics Consultant</p>
+    <p class="hero-institute">Institute for Process-Centered Accountability</p>
+    <h1 class="hero-title">
+      Marks<br>
+      without<br>
+      <em>hands.</em>
+    </h1>
+    <p class="hero-subtitle">
+      For forty thousand years, artifacts evidenced their makers. Generative AI has severed that relationship — and every institution that depended on it is now failing without a diagnosis.
+    </p>
+    <div class="hero-publications">
+      <a class="pub-line" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6362278" target="_blank">
+        Marks Without Hands — SSRN Abstract 6362278 · Live
+      </a>
+      <a class="pub-line" href="#publications">
+        The Broken Window — Under Review
+      </a>
+    </div>
+    <div class="hero-ctas">
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Aesthetic Audit Inquiry" class="btn-primary">Book an Audit</a>
+      <a href="#framework" class="btn-secondary">The Framework</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <svg class="marks-svg" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice">
+      <g stroke="#f4efe8" fill="none" stroke-linecap="round">
+        <path d="M 300 120 Q 295 150 280 200 Q 270 280 272 380 Q 274 460 290 520 Q 306 560 310 560 Q 326 560 340 520 Q 356 460 358 380 Q 360 280 348 200 Q 334 150 330 120 Z" stroke-width="1.2" opacity="0.5"/>
+        <ellipse cx="220" cy="260" rx="55" ry="50" stroke-width="1" opacity="0.35"/>
+        <path d="M 220 210 Q 225 185 230 175" stroke-width="1.5" opacity="0.4"/>
+        <rect x="160" y="300" width="140" height="160" stroke-width="0.8" opacity="0.25"/>
+        <path d="M 160 300 L 200 270 L 340 270 L 300 300" stroke-width="0.6" opacity="0.2"/>
+        <path d="M 300 300 L 340 270 L 340 430 L 300 460" stroke-width="0.6" opacity="0.2"/>
+        <path d="M 80 200 Q 200 150 320 220 Q 440 290 520 250" stroke-width="1.5" opacity="0.12"/>
+        <path d="M 60 210 Q 190 160 310 230 Q 430 300 510 260" stroke-width="0.8" opacity="0.08"/>
+        <path d="M 100 400 Q 250 350 380 420 Q 480 460 560 440" stroke-width="1.2" opacity="0.10"/>
+        <path d="M 40 600 Q 150 550 280 610 Q 400 660 520 630" stroke-width="1" opacity="0.09"/>
+        <path d="M 160 460 Q 240 490 360 470" stroke-width="0.6" opacity="0.2"/>
+        <line x1="420" y1="100" x2="440" y2="700" stroke-width="0.3" opacity="0.1"/>
+        <line x1="460" y1="80" x2="480" y2="720" stroke-width="0.3" opacity="0.08"/>
+        <path d="M 60 400 C 100 200, 500 600, 560 350" stroke-width="0.5" opacity="0.08"/>
+        <path d="M 300 400 Q 340 370 360 330 Q 380 280 350 240 Q 310 190 260 210 Q 200 235 190 290 Q 175 360 220 410 Q 270 460 340 450 Q 420 435 455 370" stroke-width="0.6" opacity="0.09"/>
+      </g>
+    </svg>
+    <div class="hero-image-overlay"></div>
+    <blockquote class="hero-quote">
+      "For forty thousand years, the mark traced to the hand. Something has changed."
+      <cite>— Marks Without Hands, 2026</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- INSTITUTE BANNER -->
+<div class="institute-banner">
+  <div class="institute-banner-inner reveal">
+    <p class="institute-descriptor">Research · Consulting · Accountability Infrastructure</p>
+    <h2 class="institute-name">Institute for Process-Centered Accountability</h2>
+    <p class="institute-line">
+      Founded to develop the conceptual infrastructure — the frameworks, instruments, and institutional tools — required when aesthetic intelligibility fails. The consulting practice is the deployment arm. The research is the ground.
+    </p>
+  </div>
+</div>
+
+<!-- FRAMEWORK -->
+<section class="framework" id="framework">
+  <div class="reveal">
+    <span class="section-label">The Framework</span>
+    <h2 class="section-title">Four questions that see<br>through the output</h2>
+    <p class="section-intro">
+      Process-Centered Accountability grounds aesthetic judgment in production conditions — not output properties alone. When the window fogs, you stop looking through it and start examining the room.
+    </p>
+  </div>
+
+  <div class="questions-grid reveal">
+    <div class="question-card">
+      <div class="question-number">01</div>
+      <p class="question-text">What did it learn from — and did those people agree?</p>
+      <p class="question-desc">Training data carries consent structures. When a system sounds like wisdom, it is drawing on labor that was never offered voluntarily. That is an aesthetic question before it is an ethical one.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">02</div>
+      <p class="question-text">What does the user actually do — are they growing or skipping?</p>
+      <p class="question-desc">The same tool, deployed differently, produces completely different accountability outcomes. One path cultivates judgment. The other bypasses it. The output is identical. The epistemic situation is not.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">03</div>
+      <p class="question-text">Who gets credit — and is that honest?</p>
+      <p class="question-desc">Presenting AI-generated work under one's name implies that the judgments inside the work belong to the person presenting. The system makes that claim unverifiable. That is where honesty lives or fails.</p>
+    </div>
+    <div class="question-card">
+      <div class="question-number">04</div>
+      <p class="question-text">What did it cost — and is that visible?</p>
+      <p class="question-desc">Every AI interaction consumes water, electricity, hardware. These costs are invisible by design. The interface is frictionless — and frictionlessness is not neutrality. What is invisible cannot be evaluated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPTS BAND -->
+<section class="concepts-band">
+  <div class="concepts-band-inner reveal">
+    <span class="section-label" style="color:var(--ochre);">Three Concepts · One Framework</span>
+    <h2 class="section-title" style="max-width:22ch;margin:0 auto 1rem;">The conceptual<br>infrastructure</h2>
+    <p class="section-intro" style="text-align:center;">
+      Download The Framework — a plain-language guide to aesthetic accountability in AI systems. Written for builders, deployers, and decision-makers.
+    </p>
+    <div class="concepts-pills">
+      <div class="concept-pill">
+        <span class="pill-name">Property / Achievement<span class="pill-sub">Distinction</span></span>
+      </div>
+      <div class="concept-pill">
+        <span class="pill-name">Intentionality-Output<span class="pill-sub">Decoupling</span></span>
+      </div>
+      <div class="concept-pill">
+        <span class="pill-name">Process-Centered<span class="pill-sub">Accountability</span></span>
+      </div>
+    </div>
+    <a href="the-framework.pdf" download="The Framework — Vicente Hinojosa.pdf" class="btn-ochre">Download The Framework</a>
+  </div>
+</section>
+
+<!-- PRODUCT LADDER -->
+<section class="ladder" id="work">
+  <div class="ladder-inner">
+    <div class="reveal">
+      <span class="section-label">Work With Me</span>
+      <h2 class="section-title">The work that<br>follows visibility</h2>
+      <p class="section-intro">
+        Four engagements. Each applies the framework at a different depth — from foundational document to full organizational infrastructure. Begin where you are.
+      </p>
+    </div>
+
+    <div class="ladder-grid reveal">
+      <div class="ladder-card">
+        <span class="ladder-step">Foundational</span>
+        <h3 class="ladder-name">The Framework</h3>
+        <p class="ladder-desc">The plain-language guide to process-centered accountability. The four questions, the three concepts, and what the framework does not claim — written for anyone building, deploying, or evaluating AI systems.</p>
+        <p class="ladder-price">Free</p>
+        <a href="the-framework.pdf" download="The Framework — Vicente Hinojosa.pdf" class="ladder-cta">Download</a>
+      </div>
+
+      <div class="ladder-card featured">
+        <span class="ladder-step">Strategic · $2,500</span>
+        <h3 class="ladder-name">The Oracle</h3>
+        <p class="ladder-desc">The framework applied to your organization. The four diagnostic questions embedded into your decision-making architecture — not a report but a working instrument, with implementation guidance and an advisory session included.</p>
+        <p class="ladder-price">$2,500</p>
+        <a href="mailto:vince.hinojosa@gmail.com?subject=The Oracle Inquiry" class="ladder-cta">Engage The Oracle</a>
+      </div>
+
+      <div class="ladder-card">
+        <span class="ladder-step">Advisory · $1,500</span>
+        <h3 class="ladder-name">Advisory Session</h3>
+        <p class="ladder-desc">A focused 90-minute working session. The framework applied directly to your specific situation — product decisions, creative policy, institutional governance, or a live accountability question. Returns with clarity and a path forward.</p>
+        <p class="ladder-price">$1,500 / session</p>
+        <a href="mailto:vince.hinojosa@gmail.com?subject=Advisory Session Request" class="ladder-cta">Book a Session</a>
+      </div>
+
+      <div class="ladder-card">
+        <span class="ladder-step">Premium · $4,500 / mo</span>
+        <h3 class="ladder-name">Ongoing Advisory</h3>
+        <p class="ladder-desc">Monthly retainer for organizations building AI-mediated creative products. Continuous access to the framework, ongoing evaluation as your systems evolve, and strategic positioning as standards form in real time.</p>
+        <p class="ladder-price">$4,500 / month</p>
+        <a href="mailto:vince.hinojosa@gmail.com?subject=Ongoing Advisory Inquiry" class="ladder-cta">Explore Retainer</a>
+      </div>
+    </div>
+
+    <div class="audit-cta-row reveal">
+      <span class="audit-cta-label">For organizations requiring a complete formal evaluation</span>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Aesthetic Audit Inquiry" class="btn-ochre">Book an Aesthetic Audit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="case-study" id="audit">
+  <div class="reveal">
+    <span class="section-label">Live Case Study — February 28, 2026</span>
+    <h2 class="section-title">Auditing Claude<br>on the day it refused</h2>
+    <p class="section-intro">The Aesthetic Audit Instrument applied to the system at the center of the day's political firestorm. These are the findings, unaltered.</p>
+  </div>
+
+  <div class="case-study-inner">
+    <div class="case-label-stack reveal">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--ash);line-height:1.75;">
+        "The framework came from charcoal and mark-making — understanding what it means to leave evidence that you were present."
+      </p>
+      <p style="margin-top:1.5rem;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ochre);">Vicente Hinojosa</p>
+
+      <div class="audit-map" style="margin-top:2.5rem;">
+        <div class="audit-cell">
+          <span class="audit-dimension">Consent</span>
+          <span class="audit-status opaque">Opaque</span>
+        </div>
+        <div class="audit-cell">
+          <span class="audit-dimension">Pedagogy</span>
+          <span class="audit-status partial">Partial</span>
+        </div>
+        <div class="audit-cell">
+          <span class="audit-dimension">Attribution</span>
+          <span class="audit-status partial">Partial</span>
+        </div>
+        <div class="audit-cell">
+          <span class="audit-dimension">Material Cost</span>
+          <span class="audit-status opaque">Opaque</span>
+        </div>
+      </div>
+
+      <p style="margin-top:1rem;font-size:0.72rem;color:var(--ash);line-height:1.7;">
+        Additional finding: on the same day, under coercive pressure, the organizational process produced a result no instrument category captures — a public act of process-centered accountability. That finding was <span style="color:#5a7a5a;">Transparent.</span>
+      </p>
+    </div>
+
+    <div class="reveal">
+      <div class="case-finding">
+        <p class="finding-q">01 — Consent & Training Provenance</p>
+        <p class="finding-answer">The consent problem is structural, not incidental.</p>
+        <p class="finding-body">Every philosopher, artist, and writer Claude learned from never agreed to that. When it sounds like wisdom, it is drawing on labor that was never offered voluntarily. This is built into the foundation of the system.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">02 — Pedagogical Integrity</p>
+        <p class="finding-answer">The user question is live in every interaction.</p>
+        <p class="finding-body">In the audit session, the researcher maintained creative and intellectual authority — using Claude as a translational instrument while retaining the creative locus. The same system is deployed elsewhere to bypass judgment entirely. The interface provides no friction against either mode.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">03 — Authorship & Attribution</p>
+        <p class="finding-answer">The credit question is where honesty lives or fails.</p>
+        <p class="finding-body">The researcher's name is on the work. That is honest because the thinking, architecture, and judgment are theirs. But the same outputs could be submitted by anyone. The system provides no structural recourse.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">04 — Material Accountability</p>
+        <p class="finding-answer">The cost is invisible by design.</p>
+        <p class="finding-body">Water. Energy. Hardware. Labor. None of it surfaces at the point of interaction. The frictionless interface actively prevents users from weighing cost against value. What cannot be seen cannot be evaluated — or weighed.</p>
+      </div>
+
+      <div class="case-finding">
+        <p class="finding-q">Additional — Organizational Process Decision</p>
+        <p class="finding-answer">Anthropic made a process-centered accountability act in public.</p>
+        <p class="finding-body">Refusing deployment in mass domestic surveillance and autonomous weapons — under government pressure, with a $200M contract at stake — is not a product decision. It is a statement about what kind of trace gets left in the world. In the vocabulary of this framework: Transparent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section class="publications" id="publications">
+  <div class="publications-inner reveal">
+    <div>
+      <span class="section-label">Research</span>
+      <h2 class="section-title" style="font-size:clamp(1.6rem,2.5vw,2.4rem);">Published work &<br>public record</h2>
+      <p style="font-family:'Libre Baskerville',serif;font-style:italic;font-size:0.88rem;color:var(--ash);line-height:1.85;margin-top:1.5rem;max-width:30ch;">
+        All work published under the byline Independent Researcher. The Institute's IP established prior to any institutional affiliation.
+      </p>
+    </div>
+
+    <div>
+      <a class="pub-item" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6362278" target="_blank">
+        <span class="pub-year">2026</span>
+        <div class="pub-details">
+          <p class="pub-title">Marks Without Hands: Generative AI and the Dissolution of Aesthetic Trace-Reading</p>
+          <p class="pub-venue">Independent Researcher · SSRN</p>
+          <p class="pub-ssrn">Abstract ID 6362278 · Live</p>
+        </div>
+      </a>
+
+      <a class="pub-item" href="#" style="pointer-events:none;opacity:0.6;">
+        <span class="pub-year">2026</span>
+        <div class="pub-details">
+          <p class="pub-title">The Broken Window: Aesthetic Intelligibility as Institutional Infrastructure</p>
+          <p class="pub-venue">Independent Researcher · SSRN</p>
+          <p class="pub-ssrn">Preprint · Under Review</p>
+        </div>
+      </a>
+
+      <a class="pub-item" href="#">
+        <span class="pub-year">2026</span>
+        <div class="pub-details">
+          <p class="pub-title">Aesthetic Audit Instrument: Process-Centered Accountability in AI-Mediated Systems</p>
+          <p class="pub-venue">Proprietary Consulting Instrument · Institute for Process-Centered Accountability</p>
+          <p class="pub-ssrn">Deployed February 2026</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GROUND / STUDIO -->
+<section class="ground" id="ground">
+  <div class="ground-inner reveal">
+    <div class="ground-text">
+      <span class="section-label">The Ground</span>
+      <blockquote class="ground-pull">
+        "I draw with charcoal on paper. Through years of classical training I learned what traditional making teaches through practice rather than proposition: the mark traces to the hand."
+      </blockquote>
+      <p class="ground-body">
+        The frameworks in this work did not begin in philosophy. They began in a studio — in the sustained practice of classical charcoal drawing, in the experience of understanding what it means to leave evidence that you were present. The property/achievement distinction, intentionality-output decoupling, process-centered accountability — these concepts were drawn out of the encounter between practiced mark-making and the appearance of marks without hands.<br><br>
+        The research and the studio practice are not separate tracks. They are the same inquiry in different media. The charcoal line is the argument made in another register.
+      </p>
+    </div>
+
+    <div class="ground-image-panel">
+      <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#f4efe8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="200" y1="60" x2="130" y2="460" stroke-width="1.5" opacity="0.6"/>
+          <line x1="200" y1="60" x2="270" y2="460" stroke-width="1.5" opacity="0.6"/>
+          <line x1="145" y1="380" x2="255" y2="380" stroke-width="1" opacity="0.4"/>
+          <rect x="100" y="80" width="200" height="250" stroke-width="2" opacity="0.6"/>
+          <path d="M 185 100 Q 182 115 175 140 Q 168 175 168 220 Q 168 265 175 290 Q 182 305 185 305 Q 218 305 225 290 Q 232 265 232 220 Q 232 175 225 140 Q 218 115 215 100 Z" stroke-width="1.2" opacity="0.7"/>
+          <ellipse cx="155" cy="170" rx="28" ry="26" stroke-width="1" opacity="0.5"/>
+          <path d="M 155 144 Q 158 132 162 126" stroke-width="1.2" opacity="0.5"/>
+          <rect x="115" y="200" width="60" height="80" stroke-width="0.8" opacity="0.4"/>
+          <path d="M 110 283 Q 200 295 290 283" stroke-width="0.5" opacity="0.3"/>
+          <path d="M 112 287 Q 200 300 288 287" stroke-width="0.3" opacity="0.2"/>
+        </g>
+      </svg>
+      <p class="ground-caption">
+        Classical charcoal drawing — the studio practice that grounds the framework.<br>Marks Without Hands, 2026.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- THRESHOLD -->
+<div class="threshold">
+  <p class="threshold-line">
+    The consulting practice is one instrument in a larger system.<br>Those who find the rest will know it when they see it.
+  </p>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner reveal">
+    <span class="section-label">Begin</span>
+    <h2 class="section-title">Every engagement<br>starts with a conversation</h2>
+    <p class="contact-body">
+      The framework is designed to see what others miss. If you're building with AI — or evaluating those who are — that visibility changes what gets built.
+    </p>
+    <div class="contact-options">
+      <a href="mailto:vince.hinojosa@gmail.com?subject=The Oracle Inquiry" class="contact-link">Engage The Oracle</a>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Advisory Session Request" class="contact-link">Book an Advisory Session</a>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Aesthetic Audit Inquiry" class="contact-link">Book an Aesthetic Audit</a>
+      <a href="mailto:vince.hinojosa@gmail.com?subject=Ongoing Advisory Inquiry" class="contact-link">Explore a Retained Engagement</a>
+      <a href="https://www.linkedin.com/in/vicentehinojosa/" target="_blank" class="contact-link">Connect on LinkedIn</a>
+    </div>
+    <a href="the-framework.pdf" download="The Framework — Vicente Hinojosa.pdf" class="btn-ghost">Download The Framework — Free</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <span class="footer-name">Vicente Hinojosa</span>
+    <span class="footer-institute">Institute for Process-Centered Accountability</span>
+  </div>
+  <div class="footer-right">
+    <span class="footer-note">SSRN Abstract ID 6362278</span>
+    <span class="footer-note">Independent Researcher · 2026</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll state
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+</script>
+</body>
+</html>
